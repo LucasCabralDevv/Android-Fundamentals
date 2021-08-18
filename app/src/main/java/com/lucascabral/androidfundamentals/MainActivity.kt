@@ -18,12 +18,34 @@ import com.lucascabral.androidfundamentals.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var lowBatteryToastReceiver: LowBatteryToastReceiver
+    private lateinit var airplaneModeChangedReceiver: AirplaneModeChangedReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        lowBatteryToastReceiver = LowBatteryToastReceiver()
+        airplaneModeChangedReceiver = AirplaneModeChangedReceiver()
 
+        setListeners()
+
+        IntentFilter(Intent.ACTION_BATTERY_LOW).also {
+            registerReceiver(lowBatteryToastReceiver, it)
+        }
+
+        IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED).also {
+            registerReceiver(airplaneModeChangedReceiver, it)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(airplaneModeChangedReceiver)
+        unregisterReceiver(lowBatteryToastReceiver)
+    }
+
+    private fun setListeners() {
         binding.buttonContacts.setOnClickListener {
             getPhoneContacts()
         }
@@ -34,10 +56,6 @@ class MainActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
             sendBroadcast(intent)
         }
-
-        val intentFilter = IntentFilter("android.intent.action.BATTERY_LOW")
-        val objReceiver = MyBroadcastReceiver()
-        registerReceiver(objReceiver, intentFilter)
     }
 
     private fun getPhoneContacts() {
