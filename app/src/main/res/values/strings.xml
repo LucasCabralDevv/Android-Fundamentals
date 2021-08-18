@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Android Fundamentals</string>
+    <string name="get_contacts_button_text">GET CONTACTS</string>
+    <string name="send_broadcast_message_button_text">SEND BROADCAST MESSAGE</string>
 </resources>

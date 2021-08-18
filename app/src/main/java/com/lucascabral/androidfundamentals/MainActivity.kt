@@ -2,6 +2,7 @@ package com.lucascabral.androidfundamentals
 
 import android.Manifest
 import android.content.ContentResolver
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
@@ -24,6 +25,13 @@ class MainActivity : AppCompatActivity() {
 
         binding.buttonContacts.setOnClickListener {
             getPhoneContacts()
+        }
+
+        binding.buttonBroadcastMessage.setOnClickListener {
+            val intent = Intent()
+            intent.action = "com.lucascabral.myBroadcastMessage"
+            intent.flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
+            sendBroadcast(intent)
         }
     }
 
