@@ -3,6 +3,7 @@ package com.lucascabral.androidfundamentals
 import android.Manifest
 import android.content.ContentResolver
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
@@ -33,6 +34,10 @@ class MainActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_INCLUDE_STOPPED_PACKAGES
             sendBroadcast(intent)
         }
+
+        val intentFilter = IntentFilter("android.intent.action.BATTERY_LOW")
+        val objReceiver = MyBroadcastReceiver()
+        registerReceiver(objReceiver, intentFilter)
     }
 
     private fun getPhoneContacts() {
